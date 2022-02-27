@@ -33,7 +33,7 @@ function App() {
   const [expYear, setExpYear] = useState('');
   const [designation, setDesignation] = useState('');
 
-  const [fullData, setFullData] = useState([]);
+  const [personalData, setPersonalData] = useState([]);
   const [tags, setTags] = useState([]);
   const handleDelete = (i) => {
     setTags(tags.filter((tag, index) => index !== i));
@@ -49,13 +49,9 @@ function App() {
     newTags.splice(currPos, 1);
     newTags.splice(newPos, 0, tag);
 
-    // re-render
     setTags(newTags);
   };
 
-  // const handleTagClick = (index) => {
-  //     console.log('The tag at index ' + index + ' was clicked');
-  // };
   const ref = createRef()
   const addEducationData = () => {
     const items = [...educationData];
@@ -88,8 +84,8 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFullData([{ name, email, phone, address }, ...tags, ...educationData, ...experienceData]);
-    console.log(fullData);
+    setPersonalData([{ name, email, phone, address }]);
+    console.log(personalData);
     setName('');
     setEmail('');
     setPhone('');
@@ -215,7 +211,7 @@ function App() {
         </Form.Group>
         <Form.Group className="mb-3 w-1/4" controlId="formBasic">
           <Form.Label>Name of Designation</Form.Label>
-          <Form.Control type="date" placeholder="Name of Designation"
+          <Form.Control type="text" placeholder="Name of Designation"
             value={designation}
             onChange={e => setDesignation(e.target.value)}
             required
@@ -276,29 +272,22 @@ function App() {
           Submit
         </Button>
       </Form>
+      <div className="flex justify-center pt-5">
+        <Pdf targetRef={ref} filename="resume.pdf">
+          {({ toPdf }) => <Button variant="primary" type="submit" onClick={toPdf}>Download Pdf</Button>}
+        </Pdf>
+      </div>
       <div id="resume" className="pt-10">
         <div ref={ref} className="pb-10">
-          {fullData.map((item, index) => (
-            <div key={index}>
-              {/* {fullData.map((item, index) => (
-                <div key={index}>
-                  <h1>{item.name}</h1>
-                  <h1>{item.email}</h1>
-                  <h1>{item.phone}</h1>
-                  <h1>{item.institute}</h1>
-                  <h1>{item.eduYear}</h1>
-                  <h1>{item.degree}</h1>
-                  <h1>{item.company}</h1>
-                  <h1>{item.expYear}</h1>
-                  <h1>{item.designation}</h1>
-                  <h1>{item.text}</h1>
-                </div>
-              ))} */}
-              <h1 className="font-CalibriBold px-10 pt-10 pb-3 w-full text-5xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white">{item.name}</h1>
-              <div className="flex px-10 space-x-20 py-3">
-                <div className="flex-initial">
-                  <div key={index} className="">
-                    <h2 className="font-CalibriBold text-xl text-blue-600">Personal Information</h2>
+          {personalData.map((item, index) => (
+            <h1 key={index} className="font-CalibriBold px-10 pt-10 pb-3 w-full text-5xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white">{item.name}</h1>
+          ))}
+          <div className="flex px-10 space-x-20 py-3">
+            <div className="flex-initial w-56">
+              <div className="">
+                <h2 className="font-CalibriBold text-xl text-blue-600">Personal Information</h2>
+                {personalData.map((item, index) => (
+                  <div key={index}>
                     <p className="font-CalibriRegular text-black text-base">{item.address}</p>
                     <div className="flex space-x-2 text-blue-600">
                       <MailFillIcon className="" />
@@ -309,267 +298,46 @@ function App() {
                       <p className="font-CalibriRegular text-base pt-0.5">{item.phone}</p>
                     </div>
                   </div>
+                ))}
+              </div>
 
-                  <div>
-                    <h2 className="font-CalibriBold text-xl text-blue-600 pt-10">Technical Skills</h2>
-                    <p className="font-CalibriBold text-black text-base">C</p>
-                    <p className="font-CalibriBold text-black text-base">C ++</p>
-                    <p className="font-CalibriBold text-black text-base">Python</p>
-                    <p className="font-CalibriBold text-black text-base">Java</p>
-                    <p className="font-CalibriBold text-black text-base">Javascript</p>
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div>
-                    <h2 className="font-CalibriBold text-xl text-blue-600">Education</h2>
-                    <div className="flex justify-between">
-                      <div>
-                        <p className="font-CalibriBold text-black text-base">B.Tech, Information Technology Engineering</p>
-                        <p className="font-CalibriItalic text-black text-base">Cochin University of Science and Technology</p>
-                      </div>
-                      <div>
-                        <p className="font-CalibriRegular text-black opacity-50 text-base">2018</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <h2 className="font-CalibriBold text-xl text-blue-600 pt-10">Work Experience</h2>
-                    <div className="flex justify-between">
-                      <div>
-                        <p className="font-CalibriBold text-black text-base">Junior Front-end Developer</p>
-                        <p className="font-CalibriItalic text-black text-base">Nissan Digital India</p>
-                      </div>
-                      <div>
-                        <p className="font-CalibriRegular text-black opacity-50 text-base">2018</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div>
+                <h2 className="font-CalibriBold text-xl text-blue-600 pt-10">Technical Skills</h2>
+                {tags.map((item, index) => (
+                  <p key={index} className="font-CalibriBold text-black text-base">{item.text}</p>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-      <Pdf targetRef={ref} filename="code-example.pdf">
-        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf>
-      {/* <div ref={ref}>
-        {fullData.map((item, index) => (
-          <div key={index}>
-            <h1>{item.name}</h1>
-            <h1>{item.email}</h1>
-            <h1>{item.phone}</h1>
-            <h1>{item.institute}</h1>
-            <h1>{item.eduYear}</h1>
-            <h1>{item.degree}</h1>
-            <h1>{item.company}</h1>
-            <h1>{item.expYear}</h1>
-            <h1>{item.designation}</h1>
-            <h1>{item.text}</h1>
-          </div>
-        ))}
-      </div>
-      <Pdf targetRef={ref} filename="code-example.pdf">
-        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf> */}
-      {/* <form className="flex flex-col text-center items-center space-y-2" onSubmit={e => { e.preventDefault(); }}>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Your Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required />
-          <label className="font-semibold">Name</label>
-        </div>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Your Email ID"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required />
-          <label className="font-semibold">Email</label>
-        </div>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Your Phone Number"
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-            required />
-          <label className="font-semibold">Phone</label>
-        </div>
-        <h1>Education</h1>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Name of Institute"
-            value={institute}
-            onChange={e => setInstitute(e.target.value)}
-            required
-             />
-          <label className="font-semibold">Institute</label>
-        </div>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Year"
-            value={eduYear}
-            onChange={e => setEduYear(e.target.value)}
-            required 
-            />
-          <label className="font-semibold">Year</label>
-        </div>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Name of Degree"
-            value={degree}
-            onChange={e => setDegree(e.target.value)}
-            required 
-            />
-          <label className="font-semibold">Degree</label>
-        </div>
-        <button
-          type="submit"
-          className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-          onClick={addEducationData}
-        >
-          +
-        </button>
-        {
-          educationData.length !== 0 && (
-            <div className="flex gap-3">
+            <div className="flex-1 w-56">
+              <div>
+                <h2 className="font-CalibriBold text-xl text-blue-600">Education</h2>
+                {educationData.map((item, index) => (
+                  <div key={index}>
+                    <div>
+                      <p className="font-CalibriBold text-black text-base">{item.degree}</p>
+                      <p className="font-CalibriItalic text-black text-base">{item.institute}</p>
+                      <p className="font-CalibriRegular text-black opacity-50 text-base">{item.eduYear}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <h2 className="font-CalibriBold text-xl text-blue-600 pt-10">Work Experience</h2>
+                {experienceData.map((item, index) => (
+                  <div key={index}>
+                    <div>
+                      <p className="font-CalibriBold text-black text-base">{item.designation}</p>
+                      <p className="font-CalibriItalic text-black text-base">{item.company}</p>
+                      <p className="font-CalibriRegular text-black opacity-50 text-base">{item.expYear}</p>
+                    </div>
+                  </div>
 
-              {
-                educationData.map((item, index) => (
-                  <span
-                    className="flex cursor-pointer space-x-2 text-center bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-                    key={index}
-                  >
-                    <span>{item.institute}</span>
-                    <span
-                      onClick={() => removeEducationData(index)}
-                      className="hover:text-black"
-                    >X</span>
-                  </span>
-                ))
-              }
+                ))}
+              </div>
             </div>
-          )
-        }
-        <h1>Experiance</h1>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Name of company"
-            value={company}
-            onChange={e => setCompany(e.target.value)}
-            required 
-            />
-          <label className="font-semibold">Company</label>
-        </div>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Year"
-            value={expYear}
-            onChange={e => setExpYear(e.target.value)}
-            required 
-            />
-          <label className="font-semibold">Year</label>
-        </div>
-        <div className="flex flex-col-reverse space-y-1">
-          <input
-            className="border-2 border-black p-2 rounded-2xl"
-            type="text"
-            placeholder="Name of Designation"
-            value={designation}
-            onChange={e => setDesignation(e.target.value)}
-            required 
-            />
-          <label className="font-semibold">Designation</label>
-        </div>
-        <button
-          type="submit"
-          className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-          onClick={addExperienceData}
-        >
-          +
-        </button>
-        {
-          experienceData.length !== 0 && (
-            <div className="flex gap-3">
-
-              {
-                experienceData.map((item, index) => (
-                  <span
-                    className="flex cursor-pointer space-x-2 text-center bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-                    key={index}
-                  >
-                    <span>{item.company}</span>
-                    <span
-                      onClick={() => removeExperienceData(index)}
-                      className="hover:text-black"
-                    >X</span>
-                  </span>
-                ))
-              }
-            </div>
-          )
-        }
-        <h1>Skills</h1>
-        <div className="flex flex-col-reverse space-y-1">
-          <ReactTags
-            tags={tags}
-            suggestions={suggestions}
-            delimiters={delimiters}
-            handleDelete={handleDelete}
-            handleAddition={handleAddition}
-            handleDrag={handleDrag}
-            inputFieldPosition="bottom"
-            autocomplete
-            editable
-          />
-        </div>
-        <div className="flex space-x-4">
-          <button
-            type="submit"
-            className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold py-2 px-4 rounded-full"
-            onClick={handleSubmit}
-          >
-            submit
-          </button>
-        </div>
-      </form>
-      <div ref={ref}>
-        {fullData.map((item, index) => (
-          <div key={index}>
-            <h1>{item.name}</h1>
-            <h1>{item.email}</h1>
-            <h1>{item.phone}</h1>
-            <h1>{item.institute}</h1>
-            <h1>{item.eduYear}</h1>
-            <h1>{item.degree}</h1>
-            <h1>{item.company}</h1>
-            <h1>{item.expYear}</h1>
-            <h1>{item.designation}</h1>
-            <h1>{item.text}</h1>
           </div>
-        ))}
+        </div>
       </div>
-      <Pdf targetRef={ref} filename="code-example.pdf">
-        {({ toPdf }) => <button onClick={toPdf}>Generate Pdf</button>}
-      </Pdf> */}
     </div >
   );
 }
