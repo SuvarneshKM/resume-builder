@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ReactTags__suggestions {
+  position: absolute;
+  width: 25%;
+}
+.ReactTags__suggestions ul {
+  list-style-type: none;
+  box-shadow: 0.05em 0.01em 0.5em rgba(0, 0, 0, 0.2);
+  background: white;
+}
+.ReactTags__suggestions li {
+  border-bottom: 1px solid #ddd;
+  padding: 5px 10px;
+  margin: 0;
+}
+.ReactTags__suggestions li mark {
+  text-decoration: underline;
+  background: none;
+  font-weight: 600;
+}
+.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
+  background: #b7cfe0;
+  cursor: pointer;
+}
+
+@layer base {
+  @font-face {
+    font-family: "Calibri-Bold";
+    src: url("/fonts/Calibri-Bold/Calibri-Bold.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Calibri-Bold-Italic";
+    src: url("/fonts/Calibri-Bold-Italic/Calibri-Bold-Italic.ttf")
+      format("truetype");
+  }
+  @font-face {
+    font-family: "Calibri-Bold-Italic";
+    src: url("/fonts/Calibri-Bold-Italic/Calibri-Bold-Italic.ttf")
+      format("truetype");
+  }
+  @font-face {
+    font-family: "Calibri-Light";
+    src: url("/fonts/Calibri-Light/Calibri-Light.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Calibri-Light-Italic";
+    src: url("/fonts/Calibri-Light-Italic/Calibri-Light-Italic.ttf")
+      format("truetype");
+  }
+  @font-face {
+    font-family: "Calibri-Regular";
+    src: url("/fonts/Calibri-Regular/Calibri-Regular.ttf") format("truetype");
+  }
+}
