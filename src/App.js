@@ -274,7 +274,7 @@ function App() {
       </Form>
       <div className="flex justify-center pt-5">
         <Pdf targetRef={ref} filename="resume.pdf">
-          {({ toPdf }) => <Button variant="primary" type="submit" onClick={toPdf}>Download Pdf</Button>}
+          {({ toPdf }) => <Button variant="primary" type="submit" onClick={toPdf}>Download Resume</Button>}
         </Pdf>
       </div>
       <div id="resume" className="pt-10">
