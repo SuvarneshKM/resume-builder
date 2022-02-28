@@ -1,12 +1,13 @@
-import { createRef, useState } from "react";
+import { useState } from "react";
 import { SKILLS } from './skills';
 import { WithContext as ReactTags } from 'react-tag-input';
-import Pdf from "react-to-pdf";
 import { Button, Form } from "react-bootstrap";
 import AddLineIcon from 'remixicon-react/AddLineIcon';
 import CloseLineIcon from 'remixicon-react/CloseLineIcon';
 import MailFillIcon from 'remixicon-react/MailFillIcon';
 import PhoneFillIcon from 'remixicon-react/PhoneFillIcon';
+import { useReactToPrint } from 'react-to-print';
+import { useRef } from 'react';
 
 
 const suggestions = SKILLS.map((skill) => {
@@ -52,7 +53,6 @@ function App() {
     setTags(newTags);
   };
 
-  const ref = createRef()
   const addEducationData = () => {
     const items = [...educationData];
     items.push({
@@ -98,6 +98,11 @@ function App() {
   const removeExperienceData = index => {
     setExperienceData(experienceData.filter((_, i) => i !== index))
   }
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   return (
     <div>
@@ -273,17 +278,15 @@ function App() {
         </Button>
       </Form>
       <div className="flex justify-center pt-5">
-        <Pdf targetRef={ref} filename="resume.pdf">
-          {({ toPdf }) => <Button variant="primary" type="submit" onClick={toPdf}>Download Resume</Button>}
-        </Pdf>
+        <Button variant="primary" type="submit" onClick={handlePrint}>Download Resume</Button>
       </div>
       <div id="resume" className="pt-10">
-        <div ref={ref} className="pb-10">
+        <div ref={componentRef} className="pb-10">
           {personalData.map((item, index) => (
             <h1 key={index} className="font-CalibriBold px-10 pt-10 pb-3 w-full text-5xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white">{item.name}</h1>
           ))}
           <div className="flex px-10 space-x-20 py-3">
-            <div className="flex-initial w-56">
+            <div className="flex-1 w-56">
               <div className="">
                 <h2 className="font-CalibriBold text-xl text-blue-600">Personal Information</h2>
                 {personalData.map((item, index) => (
@@ -308,14 +311,16 @@ function App() {
                 ))}
               </div>
             </div>
-            <div className="flex-1 w-56">
+            <div className="flex-1">
               <div>
                 <h2 className="font-CalibriBold text-xl text-blue-600">Education</h2>
                 {educationData.map((item, index) => (
-                  <div key={index}>
+                  <div key={index} className="flex justify-between">
                     <div>
                       <p className="font-CalibriBold text-black text-base">{item.degree}</p>
                       <p className="font-CalibriItalic text-black text-base">{item.institute}</p>
+                    </div>
+                    <div>
                       <p className="font-CalibriRegular text-black opacity-50 text-base">{item.eduYear}</p>
                     </div>
                   </div>
@@ -324,10 +329,12 @@ function App() {
               <div>
                 <h2 className="font-CalibriBold text-xl text-blue-600 pt-10">Work Experience</h2>
                 {experienceData.map((item, index) => (
-                  <div key={index}>
+                  <div key={index} className="flex justify-between">
                     <div>
                       <p className="font-CalibriBold text-black text-base">{item.designation}</p>
                       <p className="font-CalibriItalic text-black text-base">{item.company}</p>
+                    </div>
+                    <div>
                       <p className="font-CalibriRegular text-black opacity-50 text-base">{item.expYear}</p>
                     </div>
                   </div>
